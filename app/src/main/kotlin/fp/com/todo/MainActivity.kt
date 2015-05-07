@@ -2,19 +2,27 @@ package fp.com.todo
 
 import android.app.ListActivity
 import android.os.Bundle
+import fp.com.todo.backend.Backend
 import fp.com.todo.backend.MockedBackendService
-import fp.com.todo.backend.Task
 import kotlinx.android.synthetic.activity_main.btn_add
-import rx.Observable
-import rx.lang.kotlin.observable
+import retrofit.MockRestAdapter
+import retrofit.RestAdapter
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
+import kotlin.properties.Delegates
 
 public class MainActivity : ListActivity() {
+
+    var backend: Backend by Delegates.notNull()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         btn_add.setAlpha(0f)
-        tasks().subscribe() {
+        val restAdapter = RestAdapter.Builder().setEndpoint("1.1.1.1").build()
+        backend = MockRestAdapter.from(restAdapter).create(javaClass<Backend>(), MockedBackendService())
+
+        backend.getTasks().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe() {
             setListAdapter(TasksAdapter(this, it))
         }
     }
@@ -30,12 +38,5 @@ public class MainActivity : ListActivity() {
                 .setStartDelay(1000)
                 .alpha(1f)
                 .withLayer().start()
-    }
-
-    private fun tasks(): Observable<List<Task>> {
-        return observable { subscriber ->
-            subscriber.onNext(MockedBackendService().tasks.map { it -> it.getValue() })
-            subscriber.onCompleted()
-        }
     }
 }

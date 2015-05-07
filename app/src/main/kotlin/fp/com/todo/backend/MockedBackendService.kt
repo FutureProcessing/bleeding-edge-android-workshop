@@ -1,7 +1,13 @@
 package fp.com.todo.backend
 
+import rx.Observable
+import java.util.ArrayList
+
 
 public class MockedBackendService : Backend {
+    override fun getTasks(): Observable<List<Task>> {
+        return Observable.just(ArrayList(tasks.values()))
+    }
 
     private val mockedImages1: MutableList<String> = arrayListOf()
     private val mockedImages2: MutableList<String> = arrayListOf()
