@@ -1,5 +1,7 @@
 package fp.com.todo
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.ActionBarActivity
 import android.support.v7.widget.DefaultItemAnimator
@@ -29,10 +31,6 @@ public class ImagesActivity : ActionBarActivity() {
         TodoApplication.graph.inject(this)
         prepareRecyclerView()
         prepareRxLoaderWithSwipeToRefresh()
-
-        backend.getImagesUrls().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe() {
-            rv_images.setAdapter(ImagesAdapter(it))
-        }
     }
 
     private fun prepareRecyclerView() {
@@ -69,7 +67,7 @@ public class ImagesActivity : ActionBarActivity() {
             }
 
             override fun onNext(imageUrls: List<String>) {
-                imagesAdapter = ImagesAdapter(imageUrls)
+                imagesAdapter = ImagesAdapter(imageUrls, { returnImageUrl(it) })
                 rv_images.setAdapter(imagesAdapter)
             }
 
@@ -79,4 +77,12 @@ public class ImagesActivity : ActionBarActivity() {
             }
         }
     }
+
+    fun returnImageUrl(url: String) {
+        val resultData = Intent();
+        resultData.putExtra(AddTaskActivity.IMAGE, url)
+        setResult(Activity.RESULT_OK, resultData)
+        finish()
+    }
+
 }

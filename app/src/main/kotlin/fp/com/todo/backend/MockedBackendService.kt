@@ -7,6 +7,12 @@ import java.util.ArrayList
 
 
 public class MockedBackendService : Backend {
+    override fun postTask(task: Task): Observable<Response> {
+        task.id = tasks.size()
+        tasks.put(task.id, task)
+        return mockedOkResponse();
+    }
+
     override fun updateTask(task: Task): Observable<Response> {
         return mockedOkResponse()
     }

@@ -6,9 +6,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.squareup.picasso.Picasso
 
-public class ImagesAdapter(val imageUrls: List<String>) : RecyclerView.Adapter<ImagesAdapter.ViewHolder>() {
+public class ImagesAdapter(val imageUrls: List<String>, val onClickListener: (String) -> Unit) : RecyclerView.Adapter<ImagesAdapter.ViewHolder>() {
 
-    public inner class ViewHolder(val imageView: ImageView) : RecyclerView.ViewHolder(imageView)
+    public inner class ViewHolder(val imageView: ImageView) : RecyclerView.ViewHolder(imageView) {
+        init {
+            imageView.setOnClickListener { onClickListener(imageView.getTag().toString()) }
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImagesAdapter.ViewHolder {
         val v = LayoutInflater.from(parent.getContext()).inflate(R.layout.v_image, parent, false)
@@ -22,6 +26,7 @@ public class ImagesAdapter(val imageUrls: List<String>) : RecyclerView.Adapter<I
                 load(imageUrls.elementAt(position)).
                 placeholder(R.drawable.placeholder).
                 into(holder.imageView)
+        holder.imageView.setTag(imageUrls.elementAt(position))
     }
 
     override fun getItemCount(): Int {

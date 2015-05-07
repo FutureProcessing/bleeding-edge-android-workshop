@@ -11,4 +11,6 @@ public interface ApplicationComponent {
     void inject(MainActivity mainActivity);
 
     void inject(ImagesActivity imagesActivity);
+
+    void inject(AddTaskActivity addTaskActivity);
 }

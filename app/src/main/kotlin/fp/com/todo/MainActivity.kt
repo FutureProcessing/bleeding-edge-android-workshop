@@ -6,6 +6,7 @@ import fp.com.todo.backend.Backend
 import fp.com.todo.backend.Task
 import kotlinx.android.synthetic.activity_main.btn_add
 import kotlinx.android.synthetic.activity_main.srl_tasks
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -24,6 +25,7 @@ public class MainActivity : ListActivity() {
         TodoApplication.graph.inject(this)
         btn_add.setAlpha(0f)
         srl_tasks.setOnRefreshListener({ downloadData() })
+        btn_add.setOnClickListener { startActivity<AddTaskActivity>() }
         downloadData()
     }
 

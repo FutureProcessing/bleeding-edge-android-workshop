@@ -4,6 +4,10 @@ import retrofit.client.Response
 import rx.Observable
 
 public class BackendService(val service: Backend) : Backend {
+    override fun postTask(task: Task): Observable<Response> {
+        return service.postTask(task)
+    }
+
     override fun updateTask(task: Task): Observable<Response> {
         return service.updateTask(task)
     }
