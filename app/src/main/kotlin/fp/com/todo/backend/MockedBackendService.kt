@@ -1,10 +1,18 @@
 package fp.com.todo.backend
 
+import retrofit.client.Response
+import retrofit.mime.TypedString
 import rx.Observable
 import java.util.ArrayList
 
 
 public class MockedBackendService : Backend {
+    override fun updateTask(task: Task): Observable<Response> {
+        return mockedOkResponse()
+    }
+
+    private fun mockedOkResponse() = Observable.just(Response("/task", 200, "OK", ArrayList(), TypedString("OK")))
+
     override fun getImagesUrls(): Observable<List<String>> {
         randomizer++
         return Observable.just(if (randomizer % 2 == 0) mockedImages1 else mockedImages2)

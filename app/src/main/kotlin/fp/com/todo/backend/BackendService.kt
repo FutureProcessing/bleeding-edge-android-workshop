@@ -1,8 +1,13 @@
 package fp.com.todo.backend
 
+import retrofit.client.Response
 import rx.Observable
 
 public class BackendService(val service: Backend) : Backend {
+    override fun updateTask(task: Task): Observable<Response> {
+        return service.updateTask(task)
+    }
+
     override fun getImagesUrls(): Observable<List<String>> {
         return service.getImagesUrls()
     }

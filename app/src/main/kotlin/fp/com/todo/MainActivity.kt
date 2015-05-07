@@ -3,6 +3,7 @@ package fp.com.todo
 import android.app.ListActivity
 import android.os.Bundle
 import fp.com.todo.backend.Backend
+import fp.com.todo.backend.Task
 import kotlinx.android.synthetic.activity_main.btn_add
 import kotlinx.android.synthetic.activity_main.srl_tasks
 import org.jetbrains.anko.toast
@@ -33,7 +34,7 @@ public class MainActivity : ListActivity() {
                 .finallyDo({ srl_tasks.setRefreshing(false) })
                 .subscribe(
                         {
-                            setListAdapter(TasksAdapter(this, it))
+                            setListAdapter(TasksAdapter(this, it, { updateTask(it) }))
                         },
                         {
                             throwable ->
@@ -54,4 +55,21 @@ public class MainActivity : ListActivity() {
                 .alpha(1f)
                 .withLayer().start()
     }
+
+    private fun updateTask(task: Task) {
+        backend.updateTask(task)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        {
+                            response ->
+                            toast("Update task ${task.name} finished")
+                        },
+                        {
+                            throwable ->
+                            toast("Update task ${task.name} failed")
+                            Timber.e(throwable, "Update task $task failed")
+                        })
+    }
+
 }

@@ -14,7 +14,10 @@ import fp.com.todo.backend.Task
 
 public class TasksAdapter : ArrayAdapter<Task> {
 
-    constructor(context: Context, tasks: List<Task>) : super(context, 0, tasks) {
+    private var isDoneChangedListener: Function1<Task, Any>
+
+    constructor(context: Context, tasks: List<Task>, isDoneChangedListner: (Task)->Any) : super(context, 0, tasks) {
+        this.isDoneChangedListener = isDoneChangedListner
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
@@ -43,7 +46,10 @@ public class TasksAdapter : ArrayAdapter<Task> {
         }
 
         // TODO: Handle CheckBox click
-
+        cbIsDone.setOnClickListener{ view ->
+            task.isDone = (view as CheckBox).isChecked()
+            isDoneChangedListener.invoke(task)
+        }
         // TODO: Handle row (TextView) click
 
         // Return the completed view to render on screen
