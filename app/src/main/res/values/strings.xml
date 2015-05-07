@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Todo</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_images">ImagesActivity</string>
+    <string name="add">Add</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="add_image">Add image</string>
+    <string name="item_name">Item name</string>
+    <string name="task_image">task_image</string>
+    <string name="task">Task</string>
+</resources>
