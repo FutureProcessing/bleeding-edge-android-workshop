@@ -1,6 +1,9 @@
 package fp.com.todo
 
+import android.app.Activity
+import android.app.ActivityOptions
 import android.content.Context
+import android.content.Intent
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +19,7 @@ public class TasksAdapter : ArrayAdapter<Task> {
 
     private var isDoneChangedListener: Function1<Task, Any>
 
-    constructor(context: Context, tasks: List<Task>, isDoneChangedListner: (Task)->Any) : super(context, 0, tasks) {
+    constructor(context: Context, tasks: List<Task>, isDoneChangedListner: (Task) -> Any) : super(context, 0, tasks) {
         this.isDoneChangedListener = isDoneChangedListner
     }
 
@@ -46,17 +49,18 @@ public class TasksAdapter : ArrayAdapter<Task> {
         }
 
         // TODO: Handle CheckBox click
-        cbIsDone.setOnClickListener{ view ->
+        cbIsDone.setOnClickListener { view ->
             task.isDone = (view as CheckBox).isChecked()
             isDoneChangedListener.invoke(task)
         }
-        // TODO: Handle row (TextView) click
 
+        // TODO: Handle row (TextView) click
+        tvName.setOnClickListener { launchDetailsActivity(task, ivImage) }
         // Return the completed view to render on screen
         return view;
     }
 
-    /*
+
     private fun launchDetailsActivity(task: Task, imageView: ImageView) {
         val options = ActivityOptions
                 .makeSceneTransitionAnimation(
@@ -68,5 +72,5 @@ public class TasksAdapter : ArrayAdapter<Task> {
         intent.putExtra(AddTaskActivity.TASK, task)
         getContext().startActivity(intent, options.toBundle())
     }
-    */
+
 }
