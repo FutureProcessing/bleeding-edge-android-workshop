@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+import com.squareup.picasso.Picasso
 
 public class ImagesAdapter(val imageUrls: List<String>) : RecyclerView.Adapter<ImagesAdapter.ViewHolder>() {
 
@@ -17,10 +18,14 @@ public class ImagesAdapter(val imageUrls: List<String>) : RecyclerView.Adapter<I
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // TODO: use Picasso to load image to holder
+        Picasso.with(holder.imageView.getContext()).
+                load(imageUrls.elementAt(position)).
+                placeholder(R.drawable.placeholder).
+                into(holder.imageView)
     }
 
     override fun getItemCount(): Int {
         // TODO: return count of image URLs
-        throw UnsupportedOperationException()
+        return imageUrls.size()
     }
 }

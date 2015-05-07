@@ -9,4 +9,6 @@ import fp.com.todo.di.BackendModule;
 @Component(modules = BackendModule.class)
 public interface ApplicationComponent {
     void inject(MainActivity mainActivity);
+
+    void inject(ImagesActivity imagesActivity);
 }

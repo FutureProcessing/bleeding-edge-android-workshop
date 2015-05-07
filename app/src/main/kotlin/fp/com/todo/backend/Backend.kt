@@ -6,4 +6,7 @@ import rx.Observable
 public trait Backend {
     GET("/task")
     fun getTasks(): Observable<List<Task>>
+
+    GET("/image/urls")
+    fun getImagesUrls(): Observable<List<String>>
 }

@@ -5,6 +5,11 @@ import java.util.ArrayList
 
 
 public class MockedBackendService : Backend {
+    override fun getImagesUrls(): Observable<List<String>> {
+        randomizer++
+        return Observable.just(if (randomizer % 2 == 0) mockedImages1 else mockedImages2)
+    }
+
     override fun getTasks(): Observable<List<Task>> {
         return Observable.just(ArrayList(tasks.values()))
     }
