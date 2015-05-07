@@ -4,8 +4,11 @@ import android.app.ListActivity
 import android.os.Bundle
 import fp.com.todo.backend.Backend
 import kotlinx.android.synthetic.activity_main.btn_add
+import kotlinx.android.synthetic.activity_main.srl_tasks
+import org.jetbrains.anko.toast
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.properties.Delegates
 
@@ -19,10 +22,24 @@ public class MainActivity : ListActivity() {
         setContentView(R.layout.activity_main)
         TodoApplication.graph.inject(this)
         btn_add.setAlpha(0f)
+        srl_tasks.setOnRefreshListener({ downloadData() })
+        downloadData()
+    }
 
-        backend.getTasks().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe() {
-            setListAdapter(TasksAdapter(this, it))
-        }
+    private fun downloadData() {
+        backend.getTasks()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .finallyDo({ srl_tasks.setRefreshing(false) })
+                .subscribe(
+                        {
+                            setListAdapter(TasksAdapter(this, it))
+                        },
+                        {
+                            throwable ->
+                            toast("Loading tasks failed")
+                            Timber.e(throwable, "Loading tasks failed")
+                        })
     }
 
     override fun onPause() {

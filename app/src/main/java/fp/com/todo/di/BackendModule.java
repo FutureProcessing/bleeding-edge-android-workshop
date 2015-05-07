@@ -13,7 +13,7 @@ import retrofit.RestAdapter;
 
 @Module
 public class BackendModule {
-    private static final String BACKEND_URL = "http://10.57.134.58:10080";
+    private static final String BACKEND_URL = "http://10.57.149.40:10080";
 
     @Provides
     @Singleton
