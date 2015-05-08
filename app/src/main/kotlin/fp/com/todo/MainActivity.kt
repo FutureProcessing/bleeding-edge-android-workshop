@@ -6,7 +6,7 @@ import fp.com.todo.backend.MockedBackendService
 import fp.com.todo.backend.Task
 import kotlinx.android.synthetic.activity_main.btn_add
 import rx.Observable
-import java.util.ArrayList
+import rx.lang.kotlin.observable
 
 public class MainActivity : ListActivity() {
 
@@ -33,6 +33,9 @@ public class MainActivity : ListActivity() {
     }
 
     private fun tasks(): Observable<List<Task>> {
-        return Observable.just(ArrayList(MockedBackendService().tasks.values()))
+        return observable { subscriber ->
+            subscriber.onNext(MockedBackendService().tasks.map { it -> it.getValue() })
+            subscriber.onCompleted()
+        }
     }
 }
