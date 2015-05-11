@@ -3,6 +3,7 @@ package fp.com.todo.backend
 import retrofit.client.Response
 import retrofit.mime.TypedString
 import rx.Observable
+import rx.lang.kotlin.observable
 import java.util.ArrayList
 
 
@@ -59,5 +60,10 @@ public class MockedBackendService : Backend {
         tasks.put(10, Task(10, "Task #10", false, ""))
         tasks.put(11, Task(11, "Task #11", false, ""))
         tasks.put(12, Task(12, "Task #12", false, ""))
+    }
+
+    override fun validateName(name: String): Observable<Boolean> = observable { subscriber ->
+        subscriber.onNext(true)
+        subscriber.onCompleted()
     }
 }

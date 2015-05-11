@@ -17,6 +17,10 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.neenbedankt.android-apt'
 
+configurations.all {
+    resolutionStrategy.force 'com.android.support:support-annotations:22.1.0'
+}
+
 android {
     signingConfigs {
         release {
@@ -37,6 +41,8 @@ android {
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -96,4 +102,12 @@ dependencies {
     testCompile('com.squareup.assertj:assertj-android:1.0.0') {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
+
+    androidTestCompile "org.mockito:mockito-core:1.10.19"
+    androidTestCompile 'com.google.dexmaker:dexmaker:1.2'
+    androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.2'
+    androidTestCompile 'com.android.support.test:runner:0.2'
+    androidTestCompile 'com.android.support.test:rules:0.2'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.1'
+    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.1'
 }

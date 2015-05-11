@@ -1,10 +1,7 @@
 package fp.com.todo.backend
 
 import retrofit.client.Response
-import retrofit.http.Body
-import retrofit.http.GET
-import retrofit.http.POST
-import retrofit.http.PUT
+import retrofit.http.*
 import rx.Observable
 
 public trait Backend {
@@ -19,4 +16,7 @@ public trait Backend {
 
     POST("/task")
     fun postTask(Body task: Task): Observable<Response>
+
+    GET("/validator")
+    fun validateName(Query("name") name: String): Observable<Boolean>
 }

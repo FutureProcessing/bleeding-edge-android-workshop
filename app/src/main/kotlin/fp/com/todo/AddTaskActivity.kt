@@ -9,9 +9,13 @@ import android.view.View
 import com.squareup.picasso.Picasso
 import fp.com.todo.backend.Backend
 import fp.com.todo.backend.Task
+import fp.com.todo.services.InvalidTaskNameException
+import fp.com.todo.services.NameValidator
 import kotlinx.android.synthetic.activity_add_item.*
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.startActivityForResult
+import retrofit.client.Response
+import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import timber.log.Timber
@@ -30,6 +34,9 @@ public class AddTaskActivity : ActionBarActivity() {
     }
 
     var backend: Backend by Delegates.notNull()
+        [Inject] set
+
+    var nameValidator: NameValidator by Delegates.notNull()
         [Inject] set
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +61,13 @@ public class AddTaskActivity : ActionBarActivity() {
     }
 
     private fun buildAndSendTask() {
-        backend.postTask(buildTask()).
+        nameValidator.
+                isValid(itemName()).
+                flatMap(
+                        {
+                            if (it) backend.postTask(buildTask())
+                            else Observable.error<Response>(InvalidTaskNameException())
+                        }).
                 subscribeOn(Schedulers.io()).
                 observeOn(AndroidSchedulers.mainThread()).
                 subscribe(
@@ -65,12 +78,14 @@ public class AddTaskActivity : ActionBarActivity() {
                         },
                         {
                             throwable ->
-                            longToast("Task not sent")
+                            when (throwable) {
+                                is InvalidTaskNameException -> longToast("Invalid task name")
+                                else -> longToast("Task not sent")
+                            }
                             Timber.e(throwable, "Posting task failed")
                         }
                 )
     }
-
 
     private fun loadTaskToView(task: Task) {
         et_item_name.setText(task.name)
